@@ -1,0 +1,88 @@
+@import "tailwindcss";
+
+:root {
+  --background: #f8fafc; /* Slate 50 */
+  --foreground: #0f172a; /* Slate 900 */
+  
+  --card: #ffffff;
+  --card-foreground: #0f172a;
+  
+  --primary: #1e3a8a; /* Deep Navy Blue */
+  --primary-foreground: #ffffff;
+  
+  --secondary: #f1f5f9; /* Slate 100 */
+  --secondary-foreground: #0f172a;
+  
+  --border: #e2e8f0; /* Slate 200 */
+  --input: #ffffff;
+  
+  --success: #16a34a; /* Green 600 */
+  --success-foreground: #ffffff;
+  
+  --warning: #ca8a04; /* Yellow 600 */
+  --warning-foreground: #ffffff;
+  
+  --danger: #dc2626; /* Red 600 */
+  --danger-foreground: #ffffff;
+  
+  --muted: #64748b; /* Slate 500 */
+  --muted-foreground: #94a3b8; /* Slate 400 */
+
+  /* TCS NQT Question Palette Specific Colors */
+  --palette-unvisited: #f1f5f9;
+  --palette-unvisited-text: #475569;
+  --palette-unanswered: #ea580c; /* Orange/Red */
+  --palette-unanswered-text: #ffffff;
+  --palette-answered: #16a34a; /* Green */
+  --palette-answered-text: #ffffff;
+  --palette-review: #7c3aed; /* Purple/Violet */
+  --palette-review-text: #ffffff;
+  --palette-answered-review: #2563eb; /* Blue */
+  --palette-answered-review-text: #ffffff;
+}
+
+@theme {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  
+  --color-border: var(--border);
+  --color-input: var(--input);
+  
+  --color-success: var(--success);
+  --color-success-foreground: var(--success-foreground);
+  --color-warning: var(--warning);
+  --color-warning-foreground: var(--warning-foreground);
+  --color-danger: var(--danger);
+  --color-danger-foreground: var(--danger-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+
+  /* Palette colors */
+  --color-palette-unvisited: var(--palette-unvisited);
+  --color-palette-unvisited-text: var(--palette-unvisited-text);
+  --color-palette-unanswered: var(--palette-unanswered);
+  --color-palette-unanswered-text: var(--palette-unanswered-text);
+  --color-palette-answered: var(--palette-answered);
+  --color-palette-answered-text: var(--palette-answered-text);
+  --color-palette-review: var(--palette-review);
+  --color-palette-review-text: var(--palette-review-text);
+  --color-palette-answered-review: var(--palette-answered-review);
+  --color-palette-answered-review-text: var(--palette-answered-review-text);
+
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-geist-sans), Arial, sans-serif;
+}
+
