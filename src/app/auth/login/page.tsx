@@ -6,6 +6,7 @@ import { createClient } from "@/lib/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
+import { Footer } from "@/components/footer";
 
 function LoginForm() {
   const router = useRouter();
@@ -232,15 +233,18 @@ function LoginForm() {
 
 export default function LoginPage() {
   return (
-    <div className="flex-1 flex items-center justify-center bg-slate-50 p-4 min-h-screen">
-      <Suspense fallback={
-        <Card className="w-full max-w-md border-border shadow-md bg-white p-8 text-center space-y-4">
-          <span className="w-8 h-8 border-2 border-primary border-t-transparent rounded-full animate-spin inline-block mx-auto" />
-          <h2 className="text-sm font-bold text-slate-800">Loading Login Portal...</h2>
-        </Card>
-      }>
-        <LoginForm />
-      </Suspense>
+    <div className="flex-1 flex flex-col min-h-screen bg-slate-50">
+      <div className="flex-1 flex items-center justify-center p-4">
+        <Suspense fallback={
+          <Card className="w-full max-w-md border-border shadow-md bg-white p-8 text-center space-y-4">
+            <span className="w-8 h-8 border-2 border-primary border-t-transparent rounded-full animate-spin inline-block mx-auto" />
+            <h2 className="text-sm font-bold text-slate-800">Loading Login Portal...</h2>
+          </Card>
+        }>
+          <LoginForm />
+        </Suspense>
+      </div>
+      <Footer />
     </div>
   );
 }

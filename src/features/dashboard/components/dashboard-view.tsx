@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { logout } from "@/features/auth/actions";
+import { Footer } from "@/components/footer";
 import { LogOut, Trophy, Users, Award, Play } from "lucide-react";
 
 interface LeaderboardEntry {
@@ -274,6 +275,7 @@ export function DashboardView({
           </Card>
         </div>
       </main>
+      <Footer />
     </div>
   );
 }

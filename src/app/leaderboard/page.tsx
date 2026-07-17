@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card";
 import { Trophy, ArrowLeft, Award, School } from "lucide-react";
 import Link from "next/link";
+import { Footer } from "@/components/footer";
 
 export const revalidate = 60; // Revalidate page every 60 seconds
 
@@ -176,6 +177,7 @@ export default async function LeaderboardPage() {
           </div>
         </Card>
       </main>
+      <Footer />
     </div>
   );
 }
