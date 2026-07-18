@@ -37,23 +37,40 @@ export default async function LeaderboardPage() {
     ],
   });
 
-  // Filter for scores above 50% of the maximum possible score
-  const sessions = allSessions
-    .filter((session) => {
-      const sectionConfig = session.config?.sectionConfig as any;
-      if (!sectionConfig) return false;
+  // Group sessions by user and select the single best session per user.
+  // Best is defined as: highest score, then lowest timeTaken.
+  const bestSessionsMap: { [userId: string]: typeof allSessions[0] } = {};
+  allSessions.forEach((session) => {
+    const userId = session.userId;
+    const existing = bestSessionsMap[userId];
+    if (!existing) {
+      bestSessionsMap[userId] = session;
+    } else {
+      const currentScore = session.score ?? 0;
+      const existingScore = existing.score ?? 0;
+      if (currentScore > existingScore) {
+        bestSessionsMap[userId] = session;
+      } else if (currentScore === existingScore) {
+        const currentTime = session.timeTaken ?? Infinity;
+        const existingTime = existing.timeTaken ?? Infinity;
+        if (currentTime < existingTime) {
+          bestSessionsMap[userId] = session;
+        }
+      }
+    }
+  });
 
-      let maxScore = 0;
-      Object.values(sectionConfig).forEach((sec: any) => {
-        const count = Number(sec.count || 0);
-        const positiveScore = Number(sec.positiveScore || 0);
-        maxScore += count * positiveScore;
-      });
-
-      if (maxScore === 0) return false;
-      const currentScore = session.score || 0;
-
-      return currentScore >= 0.5 * maxScore;
+  // Convert the map back to an array sorted by best performance and limit to top 100
+  const sessions = Object.values(bestSessionsMap)
+    .sort((a, b) => {
+      const scoreA = a.score ?? 0;
+      const scoreB = b.score ?? 0;
+      if (scoreB !== scoreA) {
+        return scoreB - scoreA;
+      }
+      const timeA = a.timeTaken ?? Infinity;
+      const timeB = b.timeTaken ?? Infinity;
+      return timeA - timeB;
     })
     .slice(0, 100);
 

@@ -1,11 +1,11 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
 datasource db {
   provider  = "postgresql"
   url       = env("DATABASE_URL")
   directUrl = env("DIRECT_URL")
-}
-
-generator client {
-  provider = "prisma-client-js"
 }
 
 model Profile {
@@ -17,78 +17,78 @@ model Profile {
   graduationYear Int?
   createdAt      DateTime          @default(now())
   updatedAt      DateTime          @updatedAt
-  sessions       ExamSession[]
-  roomsCreated   ChallengeRoom[]
   memberships    ChallengeMember[]
+  roomsCreated   ChallengeRoom[]
+  sessions       ExamSession[]
 }
 
 model Question {
   id            String   @id @default(uuid()) @db.Uuid
-  section       String   // "NUMERICAL", "LOGICAL", "VERBAL"
-  topic         String   // e.g. "Averages", "Syllogisms"
-  difficulty    String   // "EASY", "MEDIUM", "HARD"
-  questionText  String   @db.Text
-  options       String[] // Array of multiple choice options
-  correctOption String   // The correct answer option (e.g. "A" or text)
-  explanation   String?  @db.Text
+  section       String
+  topic         String
+  difficulty    String
+  questionText  String
+  options       String[]
+  correctOption String
+  explanation   String?
   createdAt     DateTime @default(now())
 }
 
 model ExamConfiguration {
   id            String          @id @default(uuid()) @db.Uuid
-  name          String          // e.g. "TCS NQT Practice Test"
-  duration      Int             // total duration in minutes
-  sectionOrder  String[]        // order of sections: ["NUMERICAL", "LOGICAL", "VERBAL"]
-  sectionConfig Json            // configuration of questions, e.g. { "NUMERICAL": { "count": 20, "easy": 5... } }
+  name          String
+  duration      Int
+  sectionOrder  String[]
+  sectionConfig Json
   isDefault     Boolean         @default(false)
   createdAt     DateTime        @default(now())
-  sessions      ExamSession[]
   rooms         ChallengeRoom[]
+  sessions      ExamSession[]
 }
 
 model ExamSession {
-  id             String            @id @default(uuid()) @db.Uuid
-  userId         String            @db.Uuid
-  user           Profile           @relation(fields: [userId], references: [id], onDelete: Cascade)
-  configId       String            @db.Uuid
-  config         ExamConfiguration @relation(fields: [configId], references: [id])
-  type           String            // "PRACTICE", "MOCK", "CHALLENGE"
-  status         String            // "IN_PROGRESS", "COMPLETED", "EXPIRED"
-  startedAt      DateTime          @default(now())
-  completedAt    DateTime?
-  answers        Json              // Map of questionId -> { selectedOption: string, flagged: boolean, visited: boolean }
-  questionsOrder String[]          // List of question IDs in order of presentation
-  score          Float?
-  accuracy       Float?
-  timeTaken      Int?              // in seconds
-  sectionScores  Json?             // Breakdown of scores per section
+  id              String            @id @default(uuid()) @db.Uuid
+  userId          String            @db.Uuid
+  configId        String            @db.Uuid
+  type            String
+  status          String
+  startedAt       DateTime          @default(now())
+  completedAt     DateTime?
+  answers         Json
+  questionsOrder  String[]
+  score           Float?
+  accuracy        Float?
+  timeTaken       Int?
+  sectionScores   Json?
   challengeMember ChallengeMember?
+  config          ExamConfiguration @relation(fields: [configId], references: [id])
+  user            Profile           @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 model ChallengeRoom {
   id             String            @id @default(uuid()) @db.Uuid
-  roomCode       String            @unique // 6-digit random code
+  roomCode       String            @unique
   configId       String            @db.Uuid
-  config         ExamConfiguration @relation(fields: [configId], references: [id])
   creatorId      String            @db.Uuid
-  creator        Profile           @relation(fields: [creatorId], references: [id])
-  status         String            // "CREATED", "PLAYERS_JOINED", "READY", "COUNTDOWN", "ACTIVE", "COMPLETED"
-  questionsOrder String[]          // Locked question set for all room members
+  status         String
+  questionsOrder String[]
   createdAt      DateTime          @default(now())
   startedAt      DateTime?
   members        ChallengeMember[]
+  config         ExamConfiguration @relation(fields: [configId], references: [id])
+  creator        Profile           @relation(fields: [creatorId], references: [id])
 }
 
 model ChallengeMember {
-  id        String       @id @default(uuid()) @db.Uuid
-  roomId    String       @db.Uuid
+  id        String        @id @default(uuid()) @db.Uuid
+  roomId    String        @db.Uuid
+  userId    String        @db.Uuid
+  status    String
+  joinedAt  DateTime      @default(now())
+  sessionId String?       @unique @db.Uuid
   room      ChallengeRoom @relation(fields: [roomId], references: [id], onDelete: Cascade)
-  userId    String       @db.Uuid
-  user      Profile      @relation(fields: [userId], references: [id], onDelete: Cascade)
-  status    String       // "JOINED", "READY"
-  joinedAt  DateTime     @default(now())
-  sessionId String?      @unique @db.Uuid
-  session   ExamSession? @relation(fields: [sessionId], references: [id], onDelete: SetNull)
+  session   ExamSession?  @relation(fields: [sessionId], references: [id])
+  user      Profile       @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([roomId, userId])
 }

@@ -213,4 +213,5 @@ export async function submitSession(
 
   revalidatePath("/");
   revalidatePath(`/test/results/${sessionId}`);
+  revalidatePath("/leaderboard");
 }
